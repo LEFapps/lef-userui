@@ -1,5 +1,7 @@
 # lef-userui
 
+Creates a dropdown menu to be used in a Bootstrap navbar for user actions (login, logout, forgot password, register).
+
 ## Usage
 
 Optionally set the `profileUrl` and the `registerUrl` (defaults to `/register`).
