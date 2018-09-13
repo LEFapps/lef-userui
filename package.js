@@ -11,7 +11,7 @@ Package.onUse(api => {
 })
 
 Npm.depends({
-  react: '16.3.0',
+  react: '16.5.0',
   reactstrap: '5.0.0',
   'prop-types': '15.6.1'
 })
