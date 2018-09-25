@@ -17,9 +17,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import fontawesome from '@fortawesome/fontawesome'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Route, Link } from 'react-router-dom'
 import { Accounts } from 'meteor/accounts-base'
 import { withTracker } from 'meteor/react-meteor-data'
+import { NewAlert } from 'meteor/lef:alerts'
 
 fontawesome.library.add(faUser)
 
@@ -91,9 +92,9 @@ class ForgotPasswordForm extends Component {
     }
     this._onSubmit = this._onSubmit.bind(this)
   }
-  _onSubmit () {
-    const { email } = this.state
-    Accounts.forgotPassword(email)
+  _onSubmit (e) {
+    e.preventDefault()
+    Accounts.forgotPassword(this.state)
   }
   render () {
     return (
@@ -102,12 +103,78 @@ class ForgotPasswordForm extends Component {
           <Label>
             <Translate _id='email' />
           </Label>
-          <Input type='email' name='email' />
+          <Input
+            type='email'
+            name='email'
+            onChange={e => this.setState({ email: e.target.value })}
+          />
         </FormGroup>
         <Button type='submit'><Translate _id='reset_password' /></Button>
         <a href='#' onClick={this.props._toggleResetPassword}>
           <Translate _id='cancel' />
         </a>
+      </Form>
+    )
+  }
+}
+
+class ResetPasswordForm extends Component {
+  constructor (props) {
+    super(props)
+    this.state = { password: '', repeat_password: '' }
+    this._onSubmit = this._onSubmit.bind(this)
+  }
+  _onSubmit (e) {
+    e.preventDefault()
+    Accounts.resetPassword(
+      this.props.match.params.token,
+      this.state.password,
+      e => {
+        if (e) NewAlert({ msg: e, color: 'danger' })
+        else {
+          NewAlert({
+            translate: 'password_successfully_reset',
+            color: 'success'
+          })
+          this.props.history.push('/')
+        }
+      }
+    )
+  }
+  render () {
+    return (
+      <Form onSubmit={this._onSubmit}>
+        <FormGroup>
+          <Label>
+            <Translate _id='password' />
+          </Label>
+          <Input
+            type='password'
+            name='password'
+            onChange={e => this.setState({ password: e.target.value })}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label>
+            <Translate _id='repeat_password' />
+          </Label>
+          <Input
+            type='password'
+            name='repeat_password'
+            onChange={e => this.setState({ repeat_password: e.target.value })}
+          />
+        </FormGroup>
+        <Button
+          type='submit'
+          color='success'
+          disabled={
+            this.state.password.length > 5
+              ? this.state.password !== this.state.repeat_password
+              : true
+          }
+        >
+          <Translate _id='reset_password' />
+        </Button>
       </Form>
     )
   }
@@ -182,3 +249,4 @@ const UserMenuContainer = withTracker(() => {
 })(UserMenu)
 
 export default UserMenuContainer
+export { ResetPasswordForm }

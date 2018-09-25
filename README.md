@@ -4,12 +4,14 @@ Creates a dropdown menu to be used in a Bootstrap navbar for user actions (login
 
 ## Usage
 
-Optionally set the `profileUrl` and the `registerUrl` (defaults to `/register`).
+Optionally set the `profileUrl` and the `registerUrl` (defaults to `/register`). Put a route to handle the `/reset-password` request.
 
 ```JSX
-import UserMenu from 'meteor/lef:userui'
+import UserMenu, { ResetPasswordForm } from 'meteor/lef:userui'
 
 <UserMenu profileUrl='/profile' registerUrl='/register' />
+
+<Route exact path='/reset-password/:token' component={ResetPasswordForm} />
 ```
 
 ## Todo
