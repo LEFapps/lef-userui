@@ -17,7 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import fontawesome from '@fortawesome/fontawesome'
 import PropTypes from 'prop-types'
-import { Route, Link } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import { Accounts } from 'meteor/accounts-base'
 import { withTracker } from 'meteor/react-meteor-data'
 import { NewAlert } from 'meteor/lef:alerts'
@@ -203,7 +203,7 @@ class ToggleLoginResetPassword extends Component {
   }
 }
 
-const User = ({ profileUrl }) => {
+const User = withRouter(({ profileUrl, history }) => {
   return (
     <div>
       {profileUrl
@@ -211,12 +211,18 @@ const User = ({ profileUrl }) => {
           <Translate _id='user_profile' />
         </Link>
         : null}
-      <DropdownItem href='#' onClick={() => Meteor.logout()}>
+      <DropdownItem
+        href='#'
+        onClick={() => {
+          Meteor.logout()
+          history.push('/')
+        }}
+      >
         <Translate _id='sign_out' />
       </DropdownItem>
     </div>
   )
-}
+})
 
 const UserMenu = props => {
   return (
