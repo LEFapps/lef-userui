@@ -1,12 +1,18 @@
 Package.describe({
   summary: 'Simple UI elements for user login/logout',
-  version: '1.0.3',
+  version: '1.0.4',
   name: 'lef:userui',
   git: 'https://github.com/LEFapps/lef-userui'
 })
 
 Package.onUse(api => {
-  api.use(['ecmascript', 'lef:translations', 'lef:alerts', 'react-meteor-data'])
+  api.use([
+    'ecmascript',
+    'lef:translations',
+    'lef:alerts',
+    'lef:systemmailing',
+    'react-meteor-data'
+  ])
   api.addFiles('server.js', 'server')
   api.mainModule('client.js', 'client')
 })
