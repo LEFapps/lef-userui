@@ -21,6 +21,7 @@ import { withRouter, Link } from 'react-router-dom'
 import { Accounts } from 'meteor/accounts-base'
 import { withTracker } from 'meteor/react-meteor-data'
 import { NewAlert } from 'meteor/lef:alerts'
+import { get } from 'lodash'
 
 fontawesome.library.add(faUser)
 
@@ -171,8 +172,7 @@ class ResetPasswordForm extends Component {
             this.state.password.length > 5
               ? this.state.password !== this.state.repeat_password
               : true
-          }
-        >
+          }>
           <Translate _id='reset_password' />
         </Button>
       </Form>
@@ -203,21 +203,21 @@ class ToggleLoginResetPassword extends Component {
   }
 }
 
-const User = withRouter(({ profileUrl, history }) => {
+const User = withRouter(({ profileUrl, history, user, userNamePath }) => {
+  const userName = get(user, userNamePath)
   return (
     <div>
-      {profileUrl
-        ? <Link to={profileUrl} className='dropdown-item'>
-          <Translate _id='user_profile' />
-        </Link>
-        : null}
+      <Link to={profileUrl || '#'} className='dropdown-item'>
+        {userName
+          ? <span><Translate _id='welcome' />, {userName}</span>
+          : <Translate _id='user_profile' />}
+      </Link>
       <DropdownItem
         href='#'
         onClick={() => {
           Meteor.logout()
           history.push('/')
-        }}
-      >
+        }}>
         <Translate _id='sign_out' />
       </DropdownItem>
     </div>
@@ -233,7 +233,9 @@ const UserMenu = props => {
       <DropdownMenu right>
         {props.user
           ? <User {...props} />
-          : <ToggleLoginResetPassword {...props} />}
+          : <div className='dropdown-item-text'>
+            <ToggleLoginResetPassword {...props} />
+          </div>}
       </DropdownMenu>
     </UncontrolledDropdown>
   )
