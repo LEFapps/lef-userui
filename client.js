@@ -48,9 +48,9 @@ class LoginForm extends Component {
   render () {
     return (
       <Form onSubmit={this._onSubmit}>
-        {this.state.error
-          ? <Alert color='warning'>{this.state.error}</Alert>
-          : null}
+        {this.state.error ? (
+          <Alert color='warning'>{this.state.error}</Alert>
+        ) : null}
         <FormGroup>
           <Label>
             <Translate _id='email' />
@@ -71,11 +71,16 @@ class LoginForm extends Component {
             onChange={e => this.setState({ password: e.target.value })}
           />
         </FormGroup>
-        <Button type='submit'><Translate _id='log_in' /></Button>
+        <Button type='submit'>
+          <Translate _id='log_in' />
+        </Button>
         <p>
-          <Link to={this.props.registerUrl}>
-            <Translate _id='no_account?_please_register' />
-          </Link><br />
+          {this.props.noRegistration ? null : (
+            <Link to={this.props.registerUrl}>
+              <Translate _id='no_account?_please_register' />
+            </Link>
+          )}
+          <br />
           <a href='#' onClick={this.props._toggleResetPassword}>
             <Translate _id='forgot_password?' />
           </a>
@@ -110,7 +115,9 @@ class ForgotPasswordForm extends Component {
             onChange={e => this.setState({ email: e.target.value })}
           />
         </FormGroup>
-        <Button type='submit'><Translate _id='reset_password' /></Button>
+        <Button type='submit'>
+          <Translate _id='reset_password' />
+        </Button>
         <a href='#' onClick={this.props._toggleResetPassword}>
           <Translate _id='cancel' />
         </a>
@@ -172,7 +179,8 @@ class ResetPasswordForm extends Component {
             this.state.password.length > 5
               ? this.state.password !== this.state.repeat_password
               : true
-          }>
+          }
+        >
           <Translate _id='reset_password' />
         </Button>
       </Form>
@@ -194,12 +202,14 @@ class ToggleLoginResetPassword extends Component {
     })
   }
   render () {
-    return this.state.resetPasswordOpen
-      ? <ForgotPasswordForm _toggleResetPassword={this._toggleResetPassword} />
-      : <LoginForm
+    return this.state.resetPasswordOpen ? (
+      <ForgotPasswordForm _toggleResetPassword={this._toggleResetPassword} />
+    ) : (
+      <LoginForm
         {...this.props}
         _toggleResetPassword={this._toggleResetPassword}
       />
+    )
   }
 }
 
@@ -208,16 +218,21 @@ const User = withRouter(({ profileUrl, history, user, userNamePath }) => {
   return (
     <div>
       <Link to={profileUrl || '#'} className='dropdown-item'>
-        {userName
-          ? <span><Translate _id='welcome' />, {userName}</span>
-          : <Translate _id='user_profile' />}
+        {userName ? (
+          <span>
+            <Translate _id='welcome' />, {userName}
+          </span>
+        ) : (
+          <Translate _id='user_profile' />
+        )}
       </Link>
       <DropdownItem
         href='#'
         onClick={() => {
           Meteor.logout()
           history.push('/')
-        }}>
+        }}
+      >
         <Translate _id='sign_out' />
       </DropdownItem>
     </div>
@@ -231,11 +246,13 @@ const UserMenu = props => {
         <FontAwesomeIcon icon='user' />
       </DropdownToggle>
       <DropdownMenu right>
-        {props.user
-          ? <User {...props} />
-          : <div className='dropdown-item-text'>
+        {props.user ? (
+          <User {...props} />
+        ) : (
+          <div className='dropdown-item-text'>
             <ToggleLoginResetPassword {...props} />
-          </div>}
+          </div>
+        )}
       </DropdownMenu>
     </UncontrolledDropdown>
   )
@@ -247,7 +264,8 @@ UserMenu.defaultProps = {
 
 UserMenu.propTypes = {
   registerUrl: PropTypes.string,
-  profileUrl: PropTypes.string
+  profileUrl: PropTypes.string,
+  noRegistration: PropTypes.bool
 }
 
 const UserMenuContainer = withTracker(() => {

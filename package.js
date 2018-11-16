@@ -1,6 +1,6 @@
 Package.describe({
   summary: 'Simple UI elements for user login/logout',
-  version: '1.0.5',
+  version: '1.0.6',
   name: 'lef:userui',
   git: 'https://github.com/LEFapps/lef-userui'
 })
