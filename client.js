@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor'
 import {
   Form,
   FormGroup,
+  FormText,
   Label,
   Input,
   Button,
@@ -24,6 +25,8 @@ import { NewAlert } from 'meteor/lef:alerts'
 import { get } from 'lodash'
 
 fontawesome.library.add(faUser)
+
+const minLength = 6
 
 class LoginForm extends Component {
   constructor (props) {
@@ -161,6 +164,9 @@ class ResetPasswordForm extends Component {
             name='password'
             onChange={e => this.setState({ password: e.target.value })}
           />
+          <FormText color={'muted'}>
+            {`Min. ${minLength} tekens/characters.`}
+          </FormText>
         </FormGroup>
         <FormGroup>
           <Label>
@@ -176,7 +182,7 @@ class ResetPasswordForm extends Component {
           type='submit'
           color='success'
           disabled={
-            this.state.password.length > 5
+            this.state.password.length >= minLength
               ? this.state.password !== this.state.repeat_password
               : true
           }
