@@ -15,7 +15,7 @@ import {
   Alert
 } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import fontawesome from '@fortawesome/fontawesome'
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
@@ -24,7 +24,7 @@ import { withTracker } from 'meteor/react-meteor-data'
 import { NewAlert } from 'meteor/lef:alerts'
 import { get } from 'lodash'
 
-fontawesome.library.add(faUser)
+fontawesome.library.add(faUser, faEye, faEyeSlash)
 
 const minLength = 6
 
@@ -34,8 +34,10 @@ class LoginForm extends Component {
     this.state = {
       email: '',
       password: '',
-      error: ''
+      error: '',
+      type: 'password'
     }
+    this.toggleVisibility = this.toggleVisibility.bind(this)
     this._onSubmit = this._onSubmit.bind(this)
   }
   _onSubmit (e) {
@@ -48,6 +50,12 @@ class LoginForm extends Component {
       }
     })
   }
+  toggleVisibility () {
+    this.setState({
+      type: this.state.type === 'text' ? 'password' : 'text'
+    })
+  }
+
   render () {
     return (
       <Form onSubmit={this._onSubmit}>
@@ -68,11 +76,16 @@ class LoginForm extends Component {
           <Label>
             <Translate _id='password' />
           </Label>
-          <Input
-            type='password'
-            name='password'
-            onChange={e => this.setState({ password: e.target.value })}
-          />
+          <div className='input-wrapper'>
+            <Input
+              type={this.state.type}
+              name='password'
+              onChange={e => this.setState({ password: e.target.value })}
+            />
+            <span onClick={this.toggleVisibility} className='errspan'>
+              {this.state.type === 'text' ? <FontAwesomeIcon icon='eye-slash' className='icon' /> : <FontAwesomeIcon icon='eye' className='icon' />}
+            </span>
+          </div>
         </FormGroup>
         <Button type='submit'>
           <Translate _id='log_in' />

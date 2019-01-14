@@ -14,6 +14,7 @@ Package.onUse(api => {
     'react-meteor-data'
   ])
   api.addFiles('server.js', 'server')
+  api.addFiles('userui.css', 'client')
   api.mainModule('client.js', 'client')
 })
 
