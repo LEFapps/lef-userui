@@ -15,16 +15,12 @@ import {
   Alert
 } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
-import fontawesome from '@fortawesome/fontawesome'
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
 import { Accounts } from 'meteor/accounts-base'
 import { withTracker } from 'meteor/react-meteor-data'
 import { NewAlert } from 'meteor/lef:alerts'
 import { get } from 'lodash'
-
-fontawesome.library.add(faUser, faEye, faEyeSlash)
 
 const minLength = 6
 
@@ -83,7 +79,11 @@ class LoginForm extends Component {
               onChange={e => this.setState({ password: e.target.value })}
             />
             <span onClick={this.toggleVisibility} className='errspan'>
-              {this.state.type === 'text' ? <FontAwesomeIcon icon='eye-slash' className='icon' /> : <FontAwesomeIcon icon='eye' className='icon' />}
+              {this.state.type === 'text' ? (
+                <FontAwesomeIcon icon='eye-slash' className='icon' />
+              ) : (
+                <FontAwesomeIcon icon='eye' className='icon' />
+              )}
             </span>
           </div>
         </FormGroup>
