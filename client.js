@@ -20,7 +20,7 @@ import { withRouter, Link } from 'react-router-dom'
 import { Accounts } from 'meteor/accounts-base'
 import { withTracker } from 'meteor/react-meteor-data'
 import { NewAlert } from 'meteor/lef:alerts'
-import { get } from 'lodash'
+import get from 'lodash/get'
 
 const minLength = 6
 
@@ -117,6 +117,11 @@ class ForgotPasswordForm extends Component {
   _onSubmit (e) {
     e.preventDefault()
     Accounts.forgotPassword(this.state)
+    this.props._toggleResetPassword()
+    NewAlert({
+      translate: 'an_email_has_been_send_to_reset_password',
+      color: 'success'
+    })
   }
   render () {
     return (
@@ -134,6 +139,7 @@ class ForgotPasswordForm extends Component {
         <Button type='submit'>
           <Translate _id='reset_password' />
         </Button>
+        <br />
         <a href='#' onClick={this.props._toggleResetPassword}>
           <Translate _id='cancel' />
         </a>
