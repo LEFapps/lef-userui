@@ -22,9 +22,7 @@ import UserMenu, { ResetPasswordForm } from 'meteor/lef:userui'
 <Route exact path='/reset-password/:token' component={ResetPasswordForm} />
 ```
 
-## Todo
-
-- Password reset mail using `lef:systemmailing`
+Set `Meteor.settings.public.url`, this is used by `userui` and `systemmailing` to send email verification mails and the password reset mail.
 
 ## Icons helper file
 

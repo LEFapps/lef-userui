@@ -34,15 +34,29 @@ const verifyEmailMail = ({ profile }) => {
   return new GenerateEmail({ _id: 'verifyEmail', language })
 }
 
+const appUrl = Meteor.settings.public.url
+
 Accounts.emailTemplates = {
   resetPassword: {
     from: () => resetPasswordMail({ profile: { language: 'en' } }).from(),
     subject: user => resetPasswordMail(user).subject({ user }),
-    html: (user, url) => resetPasswordMail(user).html({ user, url })
+    html: (user, url) => {
+      if (appUrl) {
+        const urlArray = url.split('/')
+        url = appUrl + '/reset-password/' + urlArray[urlArray.length - 1]
+      }
+      return resetPasswordMail(user).html({ user, url })
+    }
   },
   verifyEmail: {
     from: () => verifyEmailMail({ profile: { language: 'en' } }).from(),
     subject: user => verifyEmailMail(user).subject({ user }),
-    html: (user, url) => verifyEmailMail(user).html({ user, url })
+    html: (user, url) => {
+      if (appUrl) {
+        const urlArray = url.split('/')
+        url = appUrl + '/verify-email/' + urlArray[urlArray.length - 1]
+      }
+      return verifyEmailMail(user).html({ user, url })
+    }
   }
 }
