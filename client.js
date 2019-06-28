@@ -116,11 +116,16 @@ class ForgotPasswordForm extends Component {
   }
   _onSubmit (e) {
     e.preventDefault()
-    Accounts.forgotPassword(this.state)
-    this.props._toggleResetPassword()
-    NewAlert({
-      translate: 'an_email_has_been_send_to_reset_password',
-      color: 'success'
+    Accounts.forgotPassword(this.state, (e, r) => {
+      this.props._toggleResetPassword()
+      if (e) {
+        if (e) NewAlert({ msg: e.message, type: 'danger', delay: 0 })
+      } else {
+        NewAlert({
+          translate: 'an_email_has_been_send_to_reset_password',
+          type: 'success'
+        })
+      }
     })
   }
   render () {
@@ -160,11 +165,11 @@ class ResetPasswordForm extends Component {
       this.props.match.params.token,
       this.state.password,
       e => {
-        if (e) NewAlert({ msg: e, color: 'danger' })
+        if (e) NewAlert({ msg: JSON.stringify(e), type: 'danger' })
         else {
           NewAlert({
             translate: 'password_successfully_reset',
-            color: 'success'
+            type: 'success'
           })
           this.props.history.push('/')
         }
