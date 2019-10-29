@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { Translate } from 'meteor/lef:translations'
 import { Meteor } from 'meteor/meteor'
 import {
@@ -304,5 +304,28 @@ const UserMenuContainer = withTracker(() => {
   }
 })(UserMenu)
 
+const VerifyEmailRoute = ({
+  match: {
+    params: { token }
+  },
+  history: { push }
+}) => {
+  const [busy, setBusy] = useState(false)
+  if (!busy) {
+    setBusy(true)
+    Accounts.verifyEmail(token, (e, r) => {
+      push('/')
+      setBusy(false)
+      if (r) {
+        NewAlert({ translate: 'email_successfully_verified', type: 'success' })
+      } else {
+        NewAlert({ msg: JSON.stringify(e), type: 'danger' })
+        console.error(e)
+      }
+    })
+  }
+  return <Alert color='info'>Verifying email...</Alert>
+}
+
 export default UserMenuContainer
-export { ResetPasswordForm }
+export { ResetPasswordForm, VerifyEmailRoute }

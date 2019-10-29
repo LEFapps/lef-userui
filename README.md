@@ -12,14 +12,15 @@ Creates a dropdown menu to be used in a Bootstrap navbar for user actions (login
 
 ## Usage
 
-Optionally set the `profileUrl`, `userNamePath` and the `registerUrl` (defaults to `/register`). Put a route in your app to handle the `/reset-password` request.
+Optionally set the `profileUrl`, `userNamePath` and the `registerUrl` (defaults to `/register`). Put a route in your app to handle the `/reset-password` request and a route to handle the `/verify-email` request.
 
 ```JSX
-import UserMenu, { ResetPasswordForm } from 'meteor/lef:userui'
+import UserMenu, { ResetPasswordForm, VerifyEmailRoute } from 'meteor/lef:userui'
 
 <UserMenu profileUrl='/profile' registerUrl='/register' userNamePath='profile.name' />
 
 <Route exact path='/reset-password/:token' component={ResetPasswordForm} />
+<Route exact path='/verify-email/:token' component={VerifyEmailRoute} />
 ```
 
 Set `Meteor.settings.public.url`, this is used by `userui` and `systemmailing` to send email verification mails and the password reset mail.
