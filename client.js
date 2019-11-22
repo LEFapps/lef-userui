@@ -41,6 +41,7 @@ class LoginForm extends Component {
     const { email, password } = this.state
     Meteor.loginWithPassword(email, password, error => {
       if (error) {
+        console.error(error)
         this.setState({ error: error.reason })
         setTimeout(() => this.setState({ error: '' }), 5000)
       }
@@ -116,10 +117,11 @@ class ForgotPasswordForm extends Component {
   }
   _onSubmit (e) {
     e.preventDefault()
-    Accounts.forgotPassword(this.state, (e, r) => {
+    Accounts.forgotPassword(this.state, error => {
       this.props._toggleResetPassword()
-      if (e) {
-        if (e) NewAlert({ msg: e.message, type: 'danger', delay: 0 })
+      if (error) {
+        NewAlert({ msg: error.message, type: 'danger', delay: 0 })
+        console.error(error)
       } else {
         NewAlert({
           translate: 'an_email_has_been_send_to_reset_password',
@@ -164,9 +166,11 @@ class ResetPasswordForm extends Component {
     Accounts.resetPassword(
       this.props.match.params.token,
       this.state.password,
-      e => {
-        if (e) NewAlert({ msg: JSON.stringify(e), type: 'danger' })
-        else {
+      error => {
+        if (error) {
+          NewAlert({ msg: error.reason, type: 'danger' })
+          console.error(error)
+        } else {
           NewAlert({
             translate: 'password_successfully_reset',
             type: 'success'
@@ -313,14 +317,14 @@ const VerifyEmailRoute = ({
   const [busy, setBusy] = useState(false)
   if (!busy) {
     setBusy(true)
-    Accounts.verifyEmail(token, (e, r) => {
+    Accounts.verifyEmail(token, (error, result) => {
       push('/')
       setBusy(false)
-      if (r) {
+      if (result) {
         NewAlert({ translate: 'email_successfully_verified', type: 'success' })
       } else {
-        NewAlert({ msg: JSON.stringify(e), type: 'danger' })
-        console.error(e)
+        NewAlert({ msg: error.reason, type: 'danger' })
+        console.error(error)
       }
     })
   }
