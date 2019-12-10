@@ -247,31 +247,34 @@ class ToggleLoginResetPassword extends Component {
   }
 }
 
-const User = withRouter(({ profileUrl, history, user, userNamePath }) => {
-  const userName = get(user, userNamePath)
-  return (
-    <div>
-      <Link to={profileUrl || '#'} className='dropdown-item'>
-        {userName ? (
-          <span>
-            <Translate _id='welcome' />, {userName}
-          </span>
-        ) : (
-          <Translate _id='user_profile' />
-        )}
-      </Link>
-      <DropdownItem
-        href='#'
-        onClick={() => {
-          Meteor.logout()
-          history.push('/')
-        }}
-      >
-        <Translate _id='sign_out' />
-      </DropdownItem>
-    </div>
-  )
-})
+const User = withRouter(
+  ({ profileUrl, history, user, userNamePath, children }) => {
+    const userName = get(user, userNamePath)
+    return (
+      <div>
+        <Link to={profileUrl || '#'} className='dropdown-item'>
+          {userName ? (
+            <span>
+              <Translate _id='welcome' />, {userName}
+            </span>
+          ) : (
+            <Translate _id='user_profile' />
+          )}
+        </Link>
+        {children || null}
+        <DropdownItem
+          href='#'
+          onClick={() => {
+            Meteor.logout()
+            history.push('/')
+          }}
+        >
+          <Translate _id='sign_out' />
+        </DropdownItem>
+      </div>
+    )
+  }
+)
 
 const UserMenu = props => {
   return (
