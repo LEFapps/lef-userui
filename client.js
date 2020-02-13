@@ -286,7 +286,7 @@ const UserMenu = props => {
         {props.user ? (
           <User {...props} />
         ) : (
-          <div className={'dropdown-item ' + props.dropdownClassName}>
+          <div className={'dropdown-header ' + (props.dropdownClassName || '')}>
             <ToggleLoginResetPassword {...props} />
           </div>
         )}
