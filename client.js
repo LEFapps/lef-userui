@@ -91,17 +91,18 @@ class LoginForm extends Component {
         <Button type='submit'>
           <Translate _id='log_in' />
         </Button>
-        <p>
+        <div className={'my-3'}>
           {this.props.noRegistration ? null : (
             <Link to={this.props.registerUrl}>
               <Translate _id='no_account?_please_register' />
             </Link>
           )}
-          <br />
+        </div>
+        <div className={'my-3'}>
           <a href='#' onClick={this.props._toggleResetPassword}>
             <Translate _id='forgot_password?' />
           </a>
-        </p>
+        </div>
       </Form>
     )
   }
@@ -146,10 +147,11 @@ class ForgotPasswordForm extends Component {
         <Button type='submit'>
           <Translate _id='reset_password' />
         </Button>
-        <br />
-        <a href='#' onClick={this.props._toggleResetPassword}>
-          <Translate _id='cancel' />
-        </a>
+        <div className={'my-3'}>
+          <a href='#' onClick={this.props._toggleResetPassword}>
+            <Translate _id='cancel' />
+          </a>
+        </div>
       </Form>
     )
   }
