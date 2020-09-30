@@ -30,7 +30,7 @@ class LoginForm extends Component {
     this.state = {
       email: '',
       password: '',
-      error: '',
+      error: null,
       type: 'password'
     }
     this.toggleVisibility = this.toggleVisibility.bind(this)
@@ -42,8 +42,16 @@ class LoginForm extends Component {
     Meteor.loginWithPassword(email, password, error => {
       if (error) {
         console.error(error)
-        this.setState({ error: error.reason })
-        setTimeout(() => this.setState({ error: '' }), 5000)
+        this.setState({
+          error: (
+            <Translate
+              _id={`error/loginWithPassword/${error.error}`}
+              params={error}
+              category={'error'}
+            />
+          )
+        })
+        setTimeout(() => this.setState({ error: null }), 5000)
       }
     })
   }
@@ -121,7 +129,11 @@ class ForgotPasswordForm extends Component {
     Accounts.forgotPassword(this.state, error => {
       this.props._toggleResetPassword()
       if (error) {
-        NewAlert({ msg: error.message, type: 'danger', delay: 0 })
+        NewAlert({
+          translate: `error/forgotPassword/${error.error}`,
+          type: 'danger',
+          delay: 0
+        })
         console.error(error)
       } else {
         NewAlert({
@@ -170,7 +182,10 @@ class ResetPasswordForm extends Component {
       this.state.password,
       error => {
         if (error) {
-          NewAlert({ msg: error.reason, type: 'danger' })
+          NewAlert({
+            translate: `error/resetPassword/${error.error}`,
+            type: 'danger'
+          })
           console.error(error)
         } else {
           NewAlert({
@@ -328,7 +343,10 @@ const VerifyEmailRoute = ({
       if (result) {
         NewAlert({ translate: 'email_successfully_verified', type: 'success' })
       } else {
-        NewAlert({ msg: error.reason, type: 'danger' })
+        NewAlert({
+          translate: `error/verifyEmail/${error.error}`,
+          type: 'danger'
+        })
         console.error(error)
       }
     })
